@@ -25,7 +25,7 @@ Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
 check_root(){
-	[[ $EUID != 0 ]] && echo -e "${Error} 当前非ROOT账号(或没有ROOT权限)，无法继续操作，请更换ROOT账号或使用 ${Green_background_prefix}sudo su${Font_color_suffix} 命令获取临时ROOT权限（执行后可能会提示输入当前账号的密码）。" && exit 1
+	[[ $EUID != 0 ]] && echo -e "${Error} 当前非 ROOT 账号(或没有 ROOT 权限)，无法继续操作，请更换 ROOT 账号或使用 ${Green_background_prefix}sudo su${Font_color_suffix} 命令获取临时 ROOT 权限（执行后可能会提示输入当前账号的密码）。" && exit 1
 }
 #检查系统
 check_sys(){
@@ -51,7 +51,7 @@ check_installed_status(){
 }
 check_crontab_installed_status(){
 	if [[ ! -e ${Crontab_file} ]]; then
-		echo -e "${Error} Crontab 没有安装，开始安装..."
+		echo -e "${Error} Crontab 没有安装，开始安装……"
 		if [[ ${release} == "centos" ]]; then
 			yum install crond -y
 		else
@@ -102,7 +102,7 @@ Download_brook(){
 	[[ ! -e ${file} ]] && mkdir ${file}
 	cd ${file}
 	if [[ ${bit} == "x86_64" ]]; then
-		wget --no-check-certificate -N "https://github.com/txthinking/brook/releases/download/${brook_new_ver}/brook"
+		wget --no-check-certificate -N "https://github.com/txthinking/brook/releases/download/${brook_new_ver}/brook_linux_amd64"
 	else
 		wget --no-check-certificate -N "https://github.com/txthinking/brook/releases/download/${brook_new_ver}/brook_linux_386"
 		mv brook_linux_386 brook
@@ -113,19 +113,19 @@ Download_brook(){
 Service_brook(){
 	if [[ ${release} = "centos" ]]; then
 		if ! wget --no-check-certificate "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/other/brook_centos" -O /etc/init.d/brook; then
-			echo -e "${Error} Brook服务 管理脚本下载失败 !" && exit 1
+			echo -e "${Error} Brook 服务 管理脚本下载失败 !" && exit 1
 		fi
 		chmod +x "/etc/init.d/brook"
 		chkconfig --add brook
 		chkconfig brook on
 	else
 		if ! wget --no-check-certificate "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/other/brook_debian" -O /etc/init.d/brook; then
-			echo -e "${Error} Brook服务 管理脚本下载失败 !" && exit 1
+			echo -e "${Error} Brook 服务 管理脚本下载失败 !" && exit 1
 		fi
 		chmod +x "/etc/init.d/brook"
 		update-rc.d -f brook defaults
 	fi
-	echo -e "${Info} Brook服务 管理脚本下载完成 !"
+	echo -e "${Info} Brook 服务 管理脚本下载完成 !"
 }
 Installation_dependency(){
 	if [[ ${release} == "centos" ]]; then
@@ -136,14 +136,14 @@ Installation_dependency(){
 	\cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 }
 Centos_yum(){
-	cat /etc/redhat-release |grep 7\..*|grep -i centos>/dev/null
+	cat /etc/redhat-release |grep 7\……*|grep -i centos>/dev/null
 	if [[ $? = 0 ]]; then
 		yum update
 		yum install -y net-tools
 	fi
 }
 Debian_apt(){
-	cat /etc/issue |grep 9\..*>/dev/null
+	cat /etc/issue |grep 9\……*>/dev/null
 	if [[ $? = 0 ]]; then
 		apt-get update
 		apt-get install -y net-tools
@@ -167,7 +167,7 @@ Set_port_Modify(){
 		do
 		echo -e "请选择并输入要修改的 Brook 账号端口 [1-65535]"
 		stty erase '^H' && read -p "(默认取消):" bk_port_Modify
-		[[ -z "${bk_port_Modify}" ]] && echo "取消..." && exit 1
+		[[ -z "${bk_port_Modify}" ]] && echo "取消……" && exit 1
 		expr ${bk_port_Modify} + 0 &>/dev/null
 		if [[ $? -eq 0 ]]; then
 			if [[ ${bk_port_Modify} -ge 1 ]] && [[ ${bk_port_Modify} -le 65535 ]]; then
@@ -243,7 +243,7 @@ Set_brook(){
  
  ${Tip} 用户的端口是不能重复的，密码可以重复 !" && echo
 	stty erase '^H' && read -p "(默认: 取消):" bk_modify
-	[[ -z "${bk_modify}" ]] && echo "已取消..." && exit 1
+	[[ -z "${bk_modify}" ]] && echo "已取消……" && exit 1
 	if [[ ${bk_modify} == "1" ]]; then
 		Add_port_user
 	elif [[ ${bk_modify} == "2" ]]; then
@@ -278,7 +278,7 @@ list_port(){
 		fi
 	fi
 	port_all_1=$(echo "${user_all}"|awk '{print $1}')
-	echo -e "\n当前所有已使用端口：\n${port_all_1}\n========================\n"
+	echo -e "\n 当前所有已使用端口：\n${port_all_1}\n========================\n"
 }
 Add_port_user(){
 	list_port "ADD"
@@ -311,7 +311,7 @@ Del_port_user(){
 Modify_port_user(){
 	list_port
 	Set_port_Modify
-	echo -e "\n${Info} 开始输入新端口... \n"
+	echo -e "\n${Info} 开始输入新端口…… \n"
 	Set_port
 	check_port "${bk_port}"
 	if [[ $? == 0 ]]; then
@@ -337,27 +337,27 @@ Modify_protocol(){
 Install_brook(){
 	check_root
 	[[ -e ${brook_file} ]] && echo -e "${Error} 检测到 Brook 已安装 !" && exit 1
-	echo -e "${Info} 开始设置 用户配置..."
+	echo -e "${Info} 开始设置 用户配置……"
 	Set_port
 	Set_passwd
 	Set_protocol
-	echo -e "${Info} 开始安装/配置 依赖..."
+	echo -e "${Info} 开始安装/配置 依赖……"
 	Installation_dependency
-	echo -e "${Info} 开始检测最新版本..."
+	echo -e "${Info} 开始检测最新版本……"
 	check_new_ver
-	echo -e "${Info} 开始下载/安装..."
+	echo -e "${Info} 开始下载/安装……"
 	Download_brook
-	echo -e "${Info} 开始下载/安装 服务脚本(init)..."
+	echo -e "${Info} 开始下载/安装 服务脚本(init)……"
 	Service_brook
-	echo -e "${Info} 开始写入 配置文件..."
+	echo -e "${Info} 开始写入 配置文件……"
 	Write_config
-	echo -e "${Info} 开始设置 iptables防火墙..."
+	echo -e "${Info} 开始设置 iptables 防火墙……"
 	Set_iptables
-	echo -e "${Info} 开始添加 iptables防火墙规则..."
+	echo -e "${Info} 开始添加 iptables 防火墙规则……"
 	Add_iptables
-	echo -e "${Info} 开始保存 iptables防火墙规则..."
+	echo -e "${Info} 开始保存 iptables 防火墙规则……"
 	Save_iptables
-	echo -e "${Info} 所有步骤 安装完毕，开始启动..."
+	echo -e "${Info} 所有步骤 安装完毕，开始启动……"
 	Start_brook
 }
 Start_brook(){
@@ -422,7 +422,7 @@ Uninstall_brook(){
 		rm -rf "/etc/init.d/brook"
 		echo && echo "Brook 卸载完成 !" && echo
 	else
-		echo && echo "卸载已取消..." && echo
+		echo && echo "卸载已取消……" && echo
 	fi
 }
 View_brook(){
@@ -459,7 +459,7 @@ View_brook(){
 			echo -e "${Brook_link_1}"
 	done
 	echo
-	echo -e "${Tip} Brook链接 仅适用于Windows系统的 Brook Tools客户端（https://doub.io/dbrj-7/）。"
+	echo -e "${Tip} Brook 链接 仅适用于 Windows 系统的 Brook Tools 客户端（https://doub.io/dbrj-7/）。"
 	echo
 }
 brook_link(){
@@ -484,7 +484,7 @@ debian_View_user_connection_info(){
 	format_1=$1
 	Read_config
 	IP_total=`netstat -anp |grep 'ESTABLISHED' |grep 'brook' |grep 'tcp6' |awk '{print $5}' |awk -F ":" '{print $1}' |sort -u |grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" |wc -l`
-	echo -e "用户总数: ${Green_background_prefix} "${user_all_num}" ${Font_color_suffix} 链接IP总数: ${Green_background_prefix} "${IP_total}" ${Font_color_suffix} "
+	echo -e "用户总数: ${Green_background_prefix} "${user_all_num}" ${Font_color_suffix} 链接 IP 总数: ${Green_background_prefix} "${IP_total}" ${Font_color_suffix} "
 	
 	for((integer = 1; integer <= ${user_all_num}; integer++))
 	do
@@ -492,16 +492,16 @@ debian_View_user_connection_info(){
 		user_IP_1=`netstat -anp |grep 'ESTABLISHED' |grep 'brook' |grep 'tcp6' |grep ":${user_port} " |awk '{print $5}' |awk -F ":" '{print $1}' |sort -u |grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
 		if [[ -z ${user_IP_1} ]]; then
 			user_IP_total="0"
-			echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接IP总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接IP: "
+			echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接 IP 总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接 IP: "
 		else
 			user_IP_total=`echo -e "${user_IP_1}"|wc -l`
 			if [[ ${format_1} == "IP_address" ]]; then
-				echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接IP总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接IP: "
+				echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接 IP 总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接 IP: "
 				get_IP_address
 				echo
 			else
 				user_IP=$(echo -e "\n${user_IP_1}")
-				echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接IP总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接IP: ${Green_font_prefix}${user_IP}${Font_color_suffix}\n"
+				echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接 IP 总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接 IP: ${Green_font_prefix}${user_IP}${Font_color_suffix}\n"
 			fi
 		fi
 		user_IP=""
@@ -511,7 +511,7 @@ centos_View_user_connection_info(){
 	format_1=$1
 	Read_config
 	IP_total=`netstat -anp |grep 'ESTABLISHED' |grep 'brook' |grep 'tcp' | grep '::ffff:' |awk '{print $5}' |awk -F ":" '{print $4}' |sort -u |grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" |wc -l`
-	echo -e "用户总数: ${Green_background_prefix} "${user_all_num}" ${Font_color_suffix} 链接IP总数: ${Green_background_prefix} "${IP_total}" ${Font_color_suffix} "
+	echo -e "用户总数: ${Green_background_prefix} "${user_all_num}" ${Font_color_suffix} 链接 IP 总数: ${Green_background_prefix} "${IP_total}" ${Font_color_suffix} "
 	
 	for((integer = 1; integer <= ${user_all_num}; integer++))
 	do
@@ -519,16 +519,16 @@ centos_View_user_connection_info(){
 		user_IP_1=`netstat -anp |grep 'ESTABLISHED' |grep 'brook' |grep 'tcp' |grep ":${user_port} "|grep '::ffff:' |awk '{print $5}' |awk -F ":" '{print $4}' |sort -u |grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
 		if [[ -z ${user_IP_1} ]]; then
 			user_IP_total="0"
-			echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接IP总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接IP: "
+			echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接 IP 总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接 IP: "
 		else
 			user_IP_total=`echo -e "${user_IP_1}"|wc -l`
 			if [[ ${format_1} == "IP_address" ]]; then
-				echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接IP总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接IP: "
+				echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接 IP 总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接 IP: "
 				get_IP_address
 				echo
 			else
 				user_IP=$(echo -e "\n${user_IP_1}")
-				echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接IP总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接IP: ${Green_font_prefix}${user_IP}${Font_color_suffix}\n"
+				echo -e "端口: ${Green_font_prefix}"${user_port}"${Font_color_suffix}\t 链接 IP 总数: ${Green_font_prefix}"${user_IP_total}"${Font_color_suffix}\t 当前链接 IP: ${Green_font_prefix}${user_IP}${Font_color_suffix}\n"
 			fi
 		fi
 		user_IP=""
@@ -538,13 +538,13 @@ View_user_connection_info(){
 	check_installed_status
 	echo && echo -e "请选择要显示的格式：
  ${Green_font_prefix}1.${Font_color_suffix} 显示 IP 格式
- ${Green_font_prefix}2.${Font_color_suffix} 显示 IP+IP归属地 格式" && echo
+ ${Green_font_prefix}2.${Font_color_suffix} 显示 IP+IP 归属地 格式" && echo
 	stty erase '^H' && read -p "(默认: 1):" brook_connection_info
 	[[ -z "${brook_connection_info}" ]] && brook_connection_info="1"
 	if [[ "${brook_connection_info}" == "1" ]]; then
 		View_user_connection_info_1 ""
 	elif [[ "${brook_connection_info}" == "2" ]]; then
-		echo -e "${Tip} 检测IP归属地(ipip.net)，如果IP较多，可能时间会比较长..."
+		echo -e "${Tip} 检测 IP 归属地(ipip.net)，如果 IP 较多，可能时间会比较长……"
 		View_user_connection_info_1 "IP_address"
 	else
 		echo -e "${Error} 请输入正确的数字(1-2)" && exit 1
@@ -553,7 +553,7 @@ View_user_connection_info(){
 View_user_connection_info_1(){
 	format=$1
 	if [[ ${release} = "centos" ]]; then
-		cat /etc/redhat-release |grep 7\..*|grep -i centos>/dev/null
+		cat /etc/redhat-release |grep 7\……*|grep -i centos>/dev/null
 		if [[ $? = 0 ]]; then
 			debian_View_user_connection_info "$format"
 		else
@@ -591,7 +591,7 @@ Set_crontab_monitor_brook(){
 		if [[ ${crontab_monitor_brook_status_ny} == [Yy] ]]; then
 			crontab_monitor_brook_cron_start
 		else
-			echo && echo "	已取消..." && echo
+			echo && echo "	已取消……" && echo
 		fi
 	else
 		echo && echo -e "当前监控模式: ${Green_font_prefix}已开启${Font_color_suffix}" && echo
@@ -601,7 +601,7 @@ Set_crontab_monitor_brook(){
 		if [[ ${crontab_monitor_brook_status_ny} == [Yy] ]]; then
 			crontab_monitor_brook_cron_stop
 		else
-			echo && echo "	已取消..." && echo
+			echo && echo "	已取消……" && echo
 		fi
 	fi
 }
@@ -635,17 +635,17 @@ crontab_monitor_brook(){
 	check_pid
 	#echo "${PID}"
 	if [[ -z ${PID} ]]; then
-		echo -e "${Error} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] 检测到 Brook服务端 未运行 , 开始启动..." | tee -a ${brook_log}
+		echo -e "${Error} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] 检测到 Brook 服务端 未运行 , 开始启动……" | tee -a ${brook_log}
 		/etc/init.d/brook start
 		sleep 1s
 		check_pid
 		if [[ -z ${PID} ]]; then
-			echo -e "${Error} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Brook服务端 启动失败..." | tee -a ${brook_log}
+			echo -e "${Error} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Brook 服务端 启动失败……" | tee -a ${brook_log}
 		else
-			echo -e "${Info} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Brook服务端 启动成功..." | tee -a ${brook_log}
+			echo -e "${Info} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Brook 服务端 启动成功……" | tee -a ${brook_log}
 		fi
 	else
-		echo -e "${Info} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Brook服务端 进程运行正常..." | tee -a ${brook_log}
+		echo -e "${Info} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Brook 服务端 进程运行正常……" | tee -a ${brook_log}
 	fi
 }
 Add_iptables(){
